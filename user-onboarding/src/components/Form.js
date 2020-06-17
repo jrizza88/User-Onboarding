@@ -12,8 +12,11 @@ const Form = () => {
 
     const handleChange = e => {
         console.log('target name: ', e.target.name)
-        console.log('targer value: ', e.target.value)
-        setForm({ ...form, [e.target.name]: e.target.value})
+        console.log('target value: ', e.target.value)
+        console.log('target checked: ', e.target.checked)
+        // set value to check via ternary operator if the target is 'checked' or a value.
+        const value = e.target.type === "checkbox" ? e.target.checked: e.target.value; 
+        setForm({ ...form, [e.target.name]: value})
     }
 
     const handleSubmit = e => {
@@ -43,11 +46,18 @@ const Form = () => {
                 />
                 <label htmlFor="name">password</label>
                 <input type="text" 
-                  id="password" 
-                  name="password" 
-                  placeHolder="Enter password"
+                   id="password" 
+                   name="password" 
+                   placeHolder="Enter password"
                    onChange={handleChange} 
                    value={form.password} 
+                />
+                <label htmlFor="name">TermsOfService</label>
+                <input type="checkbox" 
+                   id="TermsOfService" 
+                   name="TermsOfService" 
+                   onChange={handleChange} 
+                   checked={form.TermsOfService} 
                 />
                 <button>Submit</button>
             </form>
