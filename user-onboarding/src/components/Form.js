@@ -16,9 +16,15 @@ const Form = () => {
         setForm({ ...form, [e.target.name]: e.target.value})
     }
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        console.log('form submitted!')
+        // do an post request here. 
+    }
+
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="name">Name</label>
                 <input type="text" 
                   id="name" 
@@ -27,7 +33,25 @@ const Form = () => {
                    onChange={handleChange} 
                    value={form.name} 
                 />
+                <label htmlFor="name">Email</label>
+                <input type="email" 
+                  id="email" 
+                  name="email" 
+                  placeHolder="Enter Email"
+                   onChange={handleChange} 
+                   value={form.email} 
+                />
+                <label htmlFor="name">password</label>
+                <input type="text" 
+                  id="password" 
+                  name="password" 
+                  placeHolder="Enter password"
+                   onChange={handleChange} 
+                   value={form.password} 
+                />
+                <button>Submit</button>
             </form>
+         
         </div>
     )
 }
