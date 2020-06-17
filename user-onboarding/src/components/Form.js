@@ -15,10 +15,17 @@ const Form = () => {
         name: "",
         email: "",
         password: "",
-        TermsOfService: ""
+        TermsOfService: false
     });
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
+
+    const [errorState, setErrorState] = useState({
+        name: "",
+        email: "",
+        password: "",
+        TermsOfService: ""
+    });
 
     useEffect(() => {
     // Everytime formState changes, check to see if it passes verification.
@@ -28,8 +35,21 @@ const Form = () => {
     // If it does, then enable the submit button, otherwise disable
     }, [formState])
 
-    const validate = () => {
-
+    const validate = e => {
+        let value = e.target.type === 'checkbox' ? e.target.checked: e.target.value;
+        yup
+        .reach(formSchema, e.target.name)
+        .validate(value)
+        .then(valid => {
+            setErrorState({
+                ...errorState, [e.target.name]: ""
+            })
+        })
+        .catch(error => {
+            setErrorState({
+                ...errorState, [e.target.name]: error.errors[0]
+            })
+        })
     }
 
     const handleChange = e => {
@@ -38,7 +58,9 @@ const Form = () => {
         console.log('target checked: ', e.target.checked)
 
         e.persist();
-        
+
+        validate(e)
+
         // set value to check via ternary operator if the target is 'checked' or a value.
         const value = e.target.type === "checkbox" ? e.target.checked: e.target.value; 
         setFormState({ ...formState, [e.target.name]: value})
@@ -59,18 +81,22 @@ const Form = () => {
         <div>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="name">Name</label>
+                {errorState.name.length > 0 ? (
+                    <p className="error">{errorState.name}</p>
+                ) : null}
                 <input type="text" 
                   id="name" 
                   name="name" 
-                  placeHolder="Enter Name"
+                  placeholder="Enter Name"
                    onChange={handleChange} 
                    value={formState.name} 
                 />
+
                 <label htmlFor="name">Email</label>
                 <input type="email" 
                   id="email" 
                   name="email" 
-                  placeHolder="Enter Email"
+                  placeholder="Enter Email"
                    onChange={handleChange} 
                    value={formState.email} 
                 />
@@ -78,12 +104,13 @@ const Form = () => {
                 <input type="text" 
                    id="password" 
                    name="password" 
-                   placeHolder="Enter password"
+                   placeholder="Enter password"
                    onChange={handleChange} 
                    value={formState.password} 
                 />
                 <label htmlFor="name">TermsOfService</label>
-                <input type="checkbox" 
+                <input 
+                   type="checkbox" 
                    id="TermsOfService" 
                    name="TermsOfService" 
                    onChange={handleChange} 
