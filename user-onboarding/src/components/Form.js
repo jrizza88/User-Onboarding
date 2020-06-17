@@ -6,7 +6,7 @@ const formSchema = yup.object().shape({
     name: yup.string().required('You must enter in a name'),
     email: yup.string().email('Must be a valid email, missing @ symbol').required('Must include email to submit'),
     password: yup.string().required('You must enter in a password, minimum of four characters').min(4),
-    TermsOfService: yup.boolean([true], 'You must agree to the services')
+    termsOfService: yup.boolean().oneOf([true], "Please agree to terms of use")
 })
 
 const Form = () => {
@@ -15,7 +15,7 @@ const Form = () => {
         name: "",
         email: "",
         password: "",
-        TermsOfService: false
+        termsOfService: false
     });
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
@@ -24,7 +24,7 @@ const Form = () => {
         name: "",
         email: "",
         password: "",
-        TermsOfService: ""
+        termsOfService: ""
     });
 
     useEffect(() => {
@@ -91,8 +91,9 @@ const Form = () => {
                    onChange={handleChange} 
                    value={formState.name} 
                 />
-
+                
                 <label htmlFor="name">Email</label>
+                {errorState.email.length > 0 ? (<p className="error">{errorState.email}</p>): null}
                 <input type="email" 
                   id="email" 
                   name="email" 
@@ -100,7 +101,9 @@ const Form = () => {
                    onChange={handleChange} 
                    value={formState.email} 
                 />
-                <label htmlFor="name">password</label>
+                
+                <label htmlFor="name">password
+                {errorState.password.length > 0 ? (<p className="error">{errorState.password}</p>): null}
                 <input type="text" 
                    id="password" 
                    name="password" 
@@ -108,14 +111,17 @@ const Form = () => {
                    onChange={handleChange} 
                    value={formState.password} 
                 />
-                <label htmlFor="name">TermsOfService</label>
+                </label>
+                <label htmlFor="name">TermsOfService
                 <input 
                    type="checkbox" 
-                   id="TermsOfService" 
-                   name="TermsOfService" 
+                   id="termsOfService" 
+                   name="termsOfService" 
                    onChange={handleChange} 
-                   checked={formState.TermsOfService} 
+                   checked={formState.termsOfService} 
                 />
+                {errorState.termsOfService.length > 0 ? (<p className="error">{errorState.termsOfService}</p>): null}
+                </label>
                 <button disabled={buttonDisabled}>Submit</button>
             </form>
          
