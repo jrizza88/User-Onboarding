@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
+import * as yup from 'yup';
 
+const formSchema = yup.object.shape({
+    name: yup.string().required('You must enter in a name'),
+    email: yup.string().email('Must be a valid email, missing @ symbol').required('Must include email to submit'),
+    password: yup.string().required('You must enter in a password, minimum of four characters').min(4),
+    TermsOfService: yup.boolean([true], 'You must agree to the services')
+})
 
 const Form = () => {
     // create a form to onboard a new user to the system. 
