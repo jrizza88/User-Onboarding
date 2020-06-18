@@ -9,7 +9,7 @@ const formSchema = yup.object().shape({
     termsOfService: yup.boolean().oneOf([true], "Please agree to terms of use")
 })
 
-const Form = () => {
+const Form = ({addUserProp}) => {
     // create a form to onboard a new user to the system. 
     const [formState, setFormState] = useState({
         name: "",
@@ -17,6 +17,8 @@ const Form = () => {
         password: "",
         termsOfService: false
     });
+
+    const [users, setUser] = useState([])
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
 
@@ -71,10 +73,20 @@ const Form = () => {
     const handleSubmit = e => {
         e.preventDefault();
         console.log('form submitted!')
-        axios.post('https://reqres.in/api/users')
-        .then(response => console.log(response))
+        axios.post('https://reqres.in/api/users', users)
+        .then(response => {
+            setUser(response.data)
+            
+            console.log(response)
+        })
         .catch(error => console.error(error))
-        // do an post request here. 
+        //do a post request here. 
+        addUserProp(formState);
+        setFormState({        
+        name: "",
+        email: "",
+        password: "",
+        termsOfService: false})
     }
 
     return (
@@ -124,7 +136,13 @@ const Form = () => {
                 </label>
                 <button disabled={buttonDisabled}>Submit</button>
             </form>
-         
+             {/* {
+          users.map(user => <ul key={users.id}>
+            <h2>{users.name}</h2>
+          <h3>{users.email}</h3>
+          </ul>)
+        }  */}
+        
         </div>
     )
 }
